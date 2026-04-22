@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Cart</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+
+<h1>Farm To Home</h1>
+
+<nav>
+<a href="index.html">Home</a>
+<a href="products.html">Products</a>
+<a href="farmers.html">Farmers</a>
+<a href="cart.html">Cart</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+</header>
+
+<h2 class="title">Shopping Cart</h2>
+
+<table id="cart-table">
+
+<tr>
+<th>Product</th>
+<th>Price</th>
+<th>Quantity</th>
+</tr>
+
+</table>
+
+<h3 id="total">Total: ₹0</h3>
+
+<button onclick="checkout()">Checkout</button>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let table = document.getElementById("cart-table");
+
+let total = 0;
+
+// count quantity
+let itemCount = {};
+
+cart.forEach(item => {
+    if(itemCount[item.name]){
+        itemCount[item.name].quantity += 1;
+    } else {
+        itemCount[item.name] = {
+            price: item.price,
+            quantity: 1
+        };
+    }
+});
+
+// display in table
+for(let item in itemCount){
+
+    let row = document.createElement("tr");
+
+    row.innerHTML = `
+        <td>${item}</td>
+        <td>₹${itemCount[item].price}</td>
+        <td>${itemCount[item].quantity}</td>
+    `;
+
+    table.appendChild(row);
+
+    total += itemCount[item].price * itemCount[item].quantity;
+}
+
+// show total
+document.getElementById("total").innerText = "Total: ₹" + total;
+
+
+// checkout button
+function checkout(){
+    alert("Order placed successfully!");
+    localStorage.removeItem("cart");
+    location.reload();
+}
+
+</script>
+
+</body>
+</html>
